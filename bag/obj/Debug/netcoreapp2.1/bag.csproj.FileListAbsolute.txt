@@ -1,0 +1,14 @@
+/Users/evgeniyboytsov/RiderProjects/bag/bag/bin/Debug/netcoreapp2.1/bag.deps.json
+/Users/evgeniyboytsov/RiderProjects/bag/bag/bin/Debug/netcoreapp2.1/bag.runtimeconfig.json
+/Users/evgeniyboytsov/RiderProjects/bag/bag/bin/Debug/netcoreapp2.1/bag.runtimeconfig.dev.json
+/Users/evgeniyboytsov/RiderProjects/bag/bag/bin/Debug/netcoreapp2.1/bag.dll
+/Users/evgeniyboytsov/RiderProjects/bag/bag/bin/Debug/netcoreapp2.1/bag.pdb
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.csprojAssemblyReference.cache
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.csproj.CoreCompileInputs.cache
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.RazorAssemblyInfo.cache
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.RazorAssemblyInfo.cs
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.AssemblyInfoInputs.cache
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.AssemblyInfo.cs
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.RazorTargetAssemblyInfo.cache
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.dll
+/Users/evgeniyboytsov/RiderProjects/bag/bag/obj/Debug/netcoreapp2.1/bag.pdb
