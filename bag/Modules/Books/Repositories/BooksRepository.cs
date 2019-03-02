@@ -42,7 +42,7 @@ namespace bag.Modules.Books.Repositories
             {
                 dbConnection.Open();
                 return dbConnection.Query<BookEntity>(
-                    @"SELECT * FROM book WHERE id = @Id", new {Id = id}
+                    @"SELECT * FROM book WHERE id = @Id", new { Id = id }
                 ).FirstOrDefault();
             }
         }
@@ -51,6 +51,7 @@ namespace bag.Modules.Books.Repositories
         {
             using (IDbConnection dbConnection = DbConnection)
             {
+                dbConnection.Open();
                 dbConnection.Execute(@"
                     UPDATE book
                     SET 
@@ -68,8 +69,9 @@ namespace bag.Modules.Books.Repositories
         {
             using (IDbConnection dbConnection = DbConnection)
             {
+                dbConnection.Open();
                 dbConnection.Execute(
-                    @""
+                    @"DELETE FROM book WHERE id = @Id", new { Id = id }
                 );
             }
         }
@@ -78,6 +80,7 @@ namespace bag.Modules.Books.Repositories
         {
             using (IDbConnection dbConnection = DbConnection)
             {
+                dbConnection.Open();
                 return dbConnection.Query<BookEntity>(
                     @"SELECT * FROM book"
                 );

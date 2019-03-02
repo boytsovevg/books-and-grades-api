@@ -15,30 +15,52 @@ namespace bag.Modules.Books.API
     [ApiController]
     public class BooksController : Controller
     {
-        private IRepository<BookEntity> _booksRepository;
+        private readonly IRepository<BookEntity> _booksRepository;
+        
         public BooksController(IConfiguration configuration)
         {
             this._booksRepository = new BooksRepository(configuration);
         }
+
+
+        [HttpPost]
+        public void CreateBook([FromBody]BookViewModel book)
+        {
+            var bookData = new BookEntity
+            {
+                Author = book.Author,
+                Title = book.Title,
+                CoverUrl = book.Url,
+                Grade = book.Grade,
+                PagesNumber = book.PagesNumber ?? 0
+            };
+            
+            this._booksRepository.Create(bookData);
+        }
         
         [HttpGet("{id}")]
-        public BookViewModel Book(int id)
+        public BookViewModel GetBook(int id)
         {
             var bookData = this._booksRepository.GetById(id);
-            
-            return new BookViewModel
+
+            if (bookData != null)
             {
-                Id = bookData.Id,
-                Title = bookData.Title,
-                Author = bookData.Author,
-                Grade = bookData.Grade,
-                PagesNumber = bookData.PagesNumber,
-                Url = bookData.CoverUrl
-            };
+                return new BookViewModel
+                {
+                    Id = bookData.Id,
+                    Title = bookData.Title,
+                    Author = bookData.Author,
+                    Grade = bookData.Grade,
+                    PagesNumber = bookData.PagesNumber,
+                    Url = bookData.CoverUrl
+                };
+            }
+            
+            return new BookViewModel();
         }
 
         [HttpGet]
-        public IEnumerable<BookViewModel> Books()
+        public IEnumerable<BookViewModel> GetBooks()
         {
             var booksData = this._booksRepository.GetAll().ToList();
 
@@ -69,6 +91,12 @@ namespace bag.Modules.Books.API
             }
             
             this._booksRepository.Update(bookData);
+        }
+
+        [HttpDelete("{id}")]
+        public void DeleteBook(int id)
+        {
+            this._booksRepository.Delete(id);
         }
     }
 }
