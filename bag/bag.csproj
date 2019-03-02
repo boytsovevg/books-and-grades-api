@@ -5,10 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Folder Include="Modules\Books\Managers\Contracts" />
         <Folder Include="wwwroot\" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dapper">
+          <Version>1.50.7</Version>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 

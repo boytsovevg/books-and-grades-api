@@ -1,6 +1,6 @@
-namespace bag.Modules.Books
+namespace bag.Modules.Books.API.ViewModels
 {
-    public class Book
+    public class BookViewModel
     {
         public int? Id { get; set; }
         
@@ -11,8 +11,6 @@ namespace bag.Modules.Books
         public string Url { get; set; }
 
         public string Grade { get; set; }
-
-        public string BookType { get; set; } = "Print";
 
         public int PagesNumber { get; set; }
     }
