@@ -27,8 +27,8 @@ namespace bag.Modules.Books.Repositories
             {
                 dbConnection.Open();
                 dbConnection.Execute(
-                    @"INSERT INTO
-                                 books (title, author, cover_url, grade, pages_number)
+                    @"INSERT INTO book
+                                 (title, author, coverUrl, grade, pagesNumber)
                             VALUES
                                  (@Title, @Author, @CoverUrl, @Grade, @PagesNumber)",
                     item
@@ -47,14 +47,31 @@ namespace bag.Modules.Books.Repositories
             }
         }
 
-        public BookEntity Update(BookEntity item)
+        public void Update(BookEntity item)
         {
-            throw new NotImplementedException();
+            using (IDbConnection dbConnection = DbConnection)
+            {
+                dbConnection.Execute(@"
+                    UPDATE book
+                    SET 
+                        title = @Title,
+                        author = @Author,
+                        grade = @Grade,
+                        pagesNumber = @PagesNumber,
+                        coverUrl = @CoverUrl
+                    WHERE id = @Id
+                ", item);
+            }
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (IDbConnection dbConnection = DbConnection)
+            {
+                dbConnection.Execute(
+                    @""
+                );
+            }
         }
 
         public IEnumerable<BookEntity> GetAll()
@@ -62,7 +79,7 @@ namespace bag.Modules.Books.Repositories
             using (IDbConnection dbConnection = DbConnection)
             {
                 return dbConnection.Query<BookEntity>(
-                @"SELECT * FROM book"
+                    @"SELECT * FROM book"
                 );
             }
         }

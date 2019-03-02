@@ -9,7 +9,7 @@ namespace bag.Modules.Books.Repositories.Interfaces
         
         T GetById(int id);
         
-        T Update(T item);
+        void Update(T item);
         
         void Delete(int id);
 

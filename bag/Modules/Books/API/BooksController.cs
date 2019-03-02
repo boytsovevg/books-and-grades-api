@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using bag.Modules.Books.API.ViewModels;
 using bag.Modules.Books.Repositories;
@@ -51,6 +52,22 @@ namespace bag.Modules.Books.API
                     PagesNumber = data.PagesNumber,
                     Url = data.CoverUrl
                 });
+        }
+
+        [HttpPut("{id}")]
+        public void UpdateBook(int id, [FromBody]BookViewModel book)
+        {
+            var bookData = new BookEntity
+            {
+                Id = id,
+                Title = book.Title,
+                Author = book.Author,
+                CoverUrl = book.Url,
+                Grade = book.Grade,
+                PagesNumber = book.PagesNumber,
+            };
+            
+            this._booksRepository.Update(bookData);
         }
     }
 }
