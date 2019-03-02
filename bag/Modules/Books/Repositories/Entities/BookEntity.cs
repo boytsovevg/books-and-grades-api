@@ -6,7 +6,7 @@ namespace bag.Modules.Books.Repositories.Entities
     public class BookEntity: BaseEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Title { get; set; }

@@ -1,19 +1,49 @@
 using System;
+using System.Data;
+using System.Linq;
 using bag.Modules.Books.Repositories.Entities;
 using bag.Modules.Books.Repositories.Interfaces;
+using Dapper;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 namespace bag.Modules.Books.Repositories
 {
     public class BooksRepository: IRepository<BookEntity>
     {
-        public void Create(BookEntity item)
+        private readonly string _connectionString;
+
+        public BooksRepository(IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            this._connectionString = configuration.GetConnectionString("PgSql");
         }
 
-        public BookEntity GetById(Guid id)
+        internal IDbConnection DbConnection => new NpgsqlConnection(this._connectionString);
+        
+        public void Create(BookEntity item)
         {
-            throw new NotImplementedException();
+            using (IDbConnection dbConnection = DbConnection)
+            {
+                dbConnection.Open();
+                dbConnection.Execute(
+                    @"INSERT INTO
+                                 books (title, author, cover_url, grade, pages_number)
+                            VALUES
+                                 (@Title, @Author, @CoverUrl, @Grade, @PagesNumber)",
+                    item
+                );
+            }
+        }
+
+        public BookEntity GetById(int id)
+        {
+            using (IDbConnection dbConnection = DbConnection)
+            {
+                dbConnection.Open();
+                return dbConnection.Query<BookEntity>(
+                    @"SELECT * FROM book WHERE id = @Id", new {Id = id}
+                ).FirstOrDefault();
+            }
         }
 
         public BookEntity Update(BookEntity item)
@@ -21,7 +51,7 @@ namespace bag.Modules.Books.Repositories
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid id)
+        public void Delete(int id)
         {
             throw new NotImplementedException();
         }

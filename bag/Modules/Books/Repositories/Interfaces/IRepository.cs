@@ -7,11 +7,11 @@ namespace bag.Modules.Books.Repositories.Interfaces
     {
         void Create(T item);
         
-        T GetById(Guid id);
+        T GetById(int id);
         
         T Update(T item);
         
-        void Delete(Guid id);
+        void Delete(int id);
 
         IEquatable<T> GetAll();
     }
