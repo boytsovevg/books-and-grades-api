@@ -57,15 +57,16 @@ namespace bag.Modules.Books.API
         [HttpPut("{id}")]
         public void UpdateBook(int id, [FromBody]BookViewModel book)
         {
-            var bookData = new BookEntity
+            var bookData = this._booksRepository.GetById(id);
+
+            if (bookData != null)
             {
-                Id = id,
-                Title = book.Title,
-                Author = book.Author,
-                CoverUrl = book.Url,
-                Grade = book.Grade,
-                PagesNumber = book.PagesNumber,
-            };
+                bookData.Title = book.Title ?? bookData.Title;
+                bookData.Author = book.Author ?? bookData.Author;
+                bookData.CoverUrl = book.Url ?? bookData.CoverUrl;
+                bookData.Grade = book.Grade ?? bookData.Grade;
+                bookData.PagesNumber = book.PagesNumber ?? bookData.PagesNumber;
+            }
             
             this._booksRepository.Update(bookData);
         }
