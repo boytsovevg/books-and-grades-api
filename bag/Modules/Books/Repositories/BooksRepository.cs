@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using bag.Modules.Books.Repositories.Entities;
@@ -56,9 +57,14 @@ namespace bag.Modules.Books.Repositories
             throw new NotImplementedException();
         }
 
-        public IEquatable<BookEntity> GetAll()
+        public IEnumerable<BookEntity> GetAll()
         {
-            throw new NotImplementedException();
+            using (IDbConnection dbConnection = DbConnection)
+            {
+                return dbConnection.Query<BookEntity>(
+                @"SELECT * FROM book"
+                );
+            }
         }
     }
 }

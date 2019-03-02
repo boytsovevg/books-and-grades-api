@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using bag.Modules.Books.API.ViewModels;
 using bag.Modules.Books.Repositories;
 using bag.Modules.Books.Repositories.Entities;
@@ -38,9 +39,18 @@ namespace bag.Modules.Books.API
         [HttpGet]
         public IEnumerable<BookViewModel> Books()
         {
-            var books = new List<BookViewModel>();
+            var booksData = this._booksRepository.GetAll().ToList();
 
-            return books;
+            return booksData
+                .Select(data => new BookViewModel
+                {
+                    Id = data.Id,
+                    Title = data.Title,
+                    Author = data.Author,
+                    Grade = data.Grade,
+                    PagesNumber = data.PagesNumber,
+                    Url = data.CoverUrl
+                });
         }
     }
 }

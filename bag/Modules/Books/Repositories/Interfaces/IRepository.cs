@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using bag.Modules.Books.Repositories.Entities;
 
 namespace bag.Modules.Books.Repositories.Interfaces
@@ -13,6 +13,6 @@ namespace bag.Modules.Books.Repositories.Interfaces
         
         void Delete(int id);
 
-        IEquatable<T> GetAll();
+        IEnumerable<T> GetAll();
     }
 }
