@@ -1,10 +1,13 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
+using bag.Modules.Books.API.ViewModels;
+using bag.Modules.Books.Managers.Models;
 using bag.Modules.Books.Repositories.Entities;
 using bag.Modules.Books.Repositories.Interfaces;
 
 namespace bag.Modules.Books.Managers
 {
-    public class BooksManager
+    public class BooksManager: IBooksManager
     {
         private readonly IRepository<BookEntity> _booksRepository;
 
@@ -13,9 +16,67 @@ namespace bag.Modules.Books.Managers
             this._booksRepository = booksRepository;
         }
 
-        public BookEntity GetBook(int id)
+        public void CreateBook(BookModel book)
         {
-            return this._booksRepository.GetById(id);
+            this._booksRepository.Create(ToEntity(book));
+        }
+
+        public BookModel GetBook(int id)
+        {
+            var bookData = this._booksRepository.GetById(id);
+
+            return new BookModel
+            {
+                Id = bookData.Id,
+                Title = bookData.Title,
+                Author = bookData.Author,
+                Grade = bookData.Grade,
+                PagesNumber = bookData.PagesNumber,
+                CoverUrl = bookData.CoverUrl
+            };
+        }
+
+        public IEnumerable<BookModel> GetBooks()
+        {
+            var booksData = this._booksRepository.GetAll().ToList();
+
+            return booksData.Select(ToModel);
+        }
+
+        public void UpdateBook(int id, BookModel book)
+        {
+            this._booksRepository.Update(ToEntity(book));
+        }
+
+        public void DeleteBook(int id)
+        {
+            this._booksRepository.Delete(id);
+        }
+
+        private static BookModel ToModel(BookEntity bookEntity)
+        {
+            return new BookModel
+            {
+                Id = bookEntity.Id,
+                Author = bookEntity.Author,
+                CoverUrl = bookEntity.CoverUrl,
+                Grade = bookEntity.Grade,
+                PagesNumber = bookEntity.PagesNumber,
+                Title = bookEntity.Title
+            };
+        }
+
+        private static BookEntity ToEntity(BookModel bookModel)
+        {
+            return new BookEntity
+            {
+                Id = bookModel.Id,
+                Author = bookModel.Author,
+                CoverUrl = bookModel.CoverUrl,
+                Grade = bookModel.Grade,
+                PagesNumber = bookModel.PagesNumber,
+                Title = bookModel.Title
+            };
         }
     }
 }

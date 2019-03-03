@@ -8,7 +8,7 @@ namespace bag.Modules.Books.Managers.Models
         
         public string Author { get; set; }
 
-        public string Url { get; set; }
+        public string CoverUrl { get; set; }
 
         public string Grade { get; set; }
 
