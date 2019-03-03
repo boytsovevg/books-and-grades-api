@@ -15,9 +15,9 @@ namespace bag.Modules.Books.API
     {
         private readonly IRepository<BookEntity> _booksRepository;
         
-        public BooksController(IConfiguration configuration)
+        public BooksController(IRepository<BookEntity> booksRepository)
         {
-            this._booksRepository = new BooksRepository(configuration);
+            this._booksRepository = booksRepository;
         }
 
 
