@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using bag.Modules.Books.API.ViewModels;
 using bag.Modules.Books.Managers.Models;
 using bag.Modules.Books.Repositories.Entities;
 using bag.Modules.Books.Repositories.Interfaces;
@@ -23,17 +22,7 @@ namespace bag.Modules.Books.Managers
 
         public BookModel GetBook(int id)
         {
-            var bookData = this._booksRepository.GetById(id);
-
-            return new BookModel
-            {
-                Id = bookData.Id,
-                Title = bookData.Title,
-                Author = bookData.Author,
-                Grade = bookData.Grade,
-                PagesNumber = bookData.PagesNumber,
-                CoverUrl = bookData.CoverUrl
-            };
+            return ToModel(this._booksRepository.GetById(id));
         }
 
         public IEnumerable<BookModel> GetBooks()

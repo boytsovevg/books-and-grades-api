@@ -12,6 +12,6 @@ namespace bag.Modules.Books.API.ViewModels
 
         public string Grade { get; set; }
 
-        public int? PagesNumber { get; set; }
+        public int PagesNumber { get; set; }
     }
 }

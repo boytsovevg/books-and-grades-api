@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using bag.Modules.Books.API.ViewModels;
-using bag.Modules.Books.Repositories;
-using bag.Modules.Books.Repositories.Entities;
-using bag.Modules.Books.Repositories.Interfaces;
+using bag.Modules.Books.Managers;
+using bag.Modules.Books.Managers.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace bag.Modules.Books.API
 {
@@ -13,33 +11,24 @@ namespace bag.Modules.Books.API
     [ApiController]
     public class BooksController : Controller
     {
-        private readonly IRepository<BookEntity> _booksRepository;
+        private readonly IBooksManager _booksManager;
         
-        public BooksController(IRepository<BookEntity> booksRepository)
+        public BooksController(IBooksManager booksManager)
         {
-            this._booksRepository = booksRepository;
+            this._booksManager = booksManager;
         }
 
 
         [HttpPost]
         public void CreateBook([FromBody]BookViewModel book)
         {
-            var bookData = new BookEntity
-            {
-                Author = book.Author,
-                Title = book.Title,
-                CoverUrl = book.Url,
-                Grade = book.Grade,
-                PagesNumber = book.PagesNumber ?? 0
-            };
-            
-            this._booksRepository.Create(bookData);
+            this._booksManager.CreateBook(ToModel(book));
         }
         
         [HttpGet("{id}")]
         public BookViewModel GetBook(int id)
         {
-            var bookData = this._booksRepository.GetById(id);
+            var bookData = this._booksManager.GetBook(id);
 
             if (bookData != null)
             {
@@ -60,7 +49,7 @@ namespace bag.Modules.Books.API
         [HttpGet]
         public IEnumerable<BookViewModel> GetBooks()
         {
-            var booksData = this._booksRepository.GetAll().ToList();
+            var booksData = this._booksManager.GetBooks().ToList();
 
             return booksData
                 .Select(data => new BookViewModel
@@ -77,24 +66,26 @@ namespace bag.Modules.Books.API
         [HttpPut("{id}")]
         public void UpdateBook(int id, [FromBody]BookViewModel book)
         {
-            var bookData = this._booksRepository.GetById(id);
-
-            if (bookData != null)
-            {
-                bookData.Title = book.Title ?? bookData.Title;
-                bookData.Author = book.Author ?? bookData.Author;
-                bookData.CoverUrl = book.Url ?? bookData.CoverUrl;
-                bookData.Grade = book.Grade ?? bookData.Grade;
-                bookData.PagesNumber = book.PagesNumber ?? bookData.PagesNumber;
-            }
-            
-            this._booksRepository.Update(bookData);
+            this._booksManager.UpdateBook(id, ToModel(book));
         }
 
         [HttpDelete("{id}")]
         public void DeleteBook(int id)
         {
-            this._booksRepository.Delete(id);
+            this._booksManager.DeleteBook(id);
+        }
+
+        private static BookModel ToModel(BookViewModel bookViewModel)
+        {
+            return new BookModel
+            {
+                Id = bookViewModel.Id,
+                Author = bookViewModel.Author,
+                Title = bookViewModel.Title,
+                CoverUrl = bookViewModel.Url,
+                Grade = bookViewModel.Grade,
+                PagesNumber = bookViewModel.PagesNumber
+            };
         }
     }
 }
