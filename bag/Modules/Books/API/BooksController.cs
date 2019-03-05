@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using bag.Modules.Books.API.ViewModels;
+using bag.Modules.Books.API.DTOs;
 using bag.Modules.Books.Managers;
 using bag.Modules.Books.Managers.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace bag.Modules.Books.API
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateBook([FromBody]BookViewModel book)
+        public async Task<IActionResult> CreateBook([FromBody]BookDto book)
         {
             await this._booksManager.CreateBookAsync(ToModel(book));
             
@@ -34,7 +34,7 @@ namespace bag.Modules.Books.API
 
             if (bookData != null)
             {
-                return Ok(new BookViewModel
+                return Ok(new BookDto
                 {
                     Id = bookData.Id,
                     Title = bookData.Title,
@@ -54,7 +54,7 @@ namespace bag.Modules.Books.API
             var booksData = await this._booksManager.GetBooksAsync();
 
             return Ok(
-                booksData.Select(data => new BookViewModel
+                booksData.Select(data => new BookDto
                 {
                     Id = data.Id,
                     Title = data.Title,
@@ -67,7 +67,7 @@ namespace bag.Modules.Books.API
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(int id, [FromBody]BookViewModel book)
+        public async Task<IActionResult> UpdateBook(int id, [FromBody]BookDto book)
         {
             await this._booksManager.UpdateBookAsync(id, ToModel(book));
 
@@ -82,16 +82,16 @@ namespace bag.Modules.Books.API
             return Ok();
         }
 
-        private static BookModel ToModel(BookViewModel bookViewModel)
+        private static BookModel ToModel(BookDto bookDto)
         {
             return new BookModel
             {
-                Id = bookViewModel.Id,
-                Author = bookViewModel.Author,
-                Title = bookViewModel.Title,
-                CoverUrl = bookViewModel.Url,
-                Grade = bookViewModel.Grade,
-                PagesNumber = bookViewModel.PagesNumber
+                Id = bookDto.Id,
+                Author = bookDto.Author,
+                Title = bookDto.Title,
+                CoverUrl = bookDto.Url,
+                Grade = bookDto.Grade,
+                PagesNumber = bookDto.PagesNumber
             };
         }
     }

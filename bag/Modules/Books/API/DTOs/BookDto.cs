@@ -1,6 +1,6 @@
-namespace bag.Modules.Books.API.ViewModels
+namespace bag.Modules.Books.API.DTOs
 {
-    public class BookViewModel
+    public class BookDto
     {
         public int? Id { get; set; }
         
