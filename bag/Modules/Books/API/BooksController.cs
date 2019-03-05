@@ -20,19 +20,21 @@ namespace bag.Modules.Books.API
 
 
         [HttpPost]
-        public void CreateBook([FromBody]BookViewModel book)
+        public IActionResult CreateBook([FromBody]BookViewModel book)
         {
             this._booksManager.CreateBook(ToModel(book));
+            
+            return Ok();
         }
         
         [HttpGet("{id}")]
-        public BookViewModel GetBook(int id)
+        public IActionResult GetBook(int id)
         {
             var bookData = this._booksManager.GetBook(id);
 
             if (bookData != null)
             {
-                return new BookViewModel
+                return Ok(new BookViewModel
                 {
                     Id = bookData.Id,
                     Title = bookData.Title,
@@ -40,19 +42,19 @@ namespace bag.Modules.Books.API
                     Grade = bookData.Grade,
                     PagesNumber = bookData.PagesNumber,
                     Url = bookData.CoverUrl
-                };
+                });
             }
             
-            return new BookViewModel();
+            return NotFound();
         }
 
         [HttpGet]
-        public IEnumerable<BookViewModel> GetBooks()
+        public IActionResult GetBooks()
         {
             var booksData = this._booksManager.GetBooks().ToList();
 
-            return booksData
-                .Select(data => new BookViewModel
+            return Ok(
+                booksData.Select(data => new BookViewModel
                 {
                     Id = data.Id,
                     Title = data.Title,
@@ -60,7 +62,8 @@ namespace bag.Modules.Books.API
                     Grade = data.Grade,
                     PagesNumber = data.PagesNumber,
                     Url = data.CoverUrl
-                });
+                })
+            );
         }
 
         [HttpPut("{id}")]
@@ -70,9 +73,11 @@ namespace bag.Modules.Books.API
         }
 
         [HttpDelete("{id}")]
-        public void DeleteBook(int id)
+        public IActionResult DeleteBook(int id)
         {
             this._booksManager.DeleteBook(id);
+
+            return Ok();
         }
 
         private static BookModel ToModel(BookViewModel bookViewModel)

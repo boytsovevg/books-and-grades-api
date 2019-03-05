@@ -1,7 +1,4 @@
-﻿using bag.Modules.Books.Managers;
-using bag.Modules.Books.Repositories;
-using bag.Modules.Books.Repositories.Entities;
-using bag.Modules.Books.Repositories.Interfaces;
+﻿using bag.Modules.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +21,7 @@ namespace bag
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<IBooksManager, BooksManager>();
-            services.AddSingleton<IRepository<BookEntity>, BooksRepository>();
+            services.AddBookDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

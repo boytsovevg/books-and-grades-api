@@ -18,7 +18,7 @@ namespace bag.Modules.Books.Repositories
             this._connectionString = configuration.GetConnectionString("PgSql");
         }
 
-        internal IDbConnection DbConnection => new NpgsqlConnection(this._connectionString);
+        private IDbConnection DbConnection => new NpgsqlConnection(this._connectionString);
         
         public void Create(BookEntity item)
         {
