@@ -1,18 +1,19 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using bag.Modules.Books.Repositories.Entities;
 
 namespace bag.Modules.Books.Repositories.Interfaces
 {
     public interface IRepository<T> where T: BaseEntity
     {
-        void Create(T item);
+        Task CreateAsync(T item);
         
-        T GetById(int id);
+        Task<T> GetByIdAsync(int id);
         
-        void Update(T item);
+        Task UpdateAsync(T item);
         
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
-        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
     }
 }

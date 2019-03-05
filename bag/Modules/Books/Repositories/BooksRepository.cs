@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using bag.Modules.Books.Repositories.Entities;
 using bag.Modules.Books.Repositories.Interfaces;
 using Dapper;
@@ -20,12 +21,12 @@ namespace bag.Modules.Books.Repositories
 
         private IDbConnection DbConnection => new NpgsqlConnection(this._connectionString);
         
-        public void Create(BookEntity item)
+        public async Task CreateAsync(BookEntity item)
         {
             using (IDbConnection dbConnection = DbConnection)
             {
                 dbConnection.Open();
-                dbConnection.Execute(
+                await dbConnection.ExecuteAsync(
                     @"INSERT INTO book
                                  (title, author, coverUrl, grade, pagesNumber)
                             VALUES
@@ -35,23 +36,25 @@ namespace bag.Modules.Books.Repositories
             }
         }
 
-        public BookEntity GetById(int id)
+        public async Task<BookEntity> GetByIdAsync(int id)
         {
             using (IDbConnection dbConnection = DbConnection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<BookEntity>(
+                var booksData = await dbConnection.QueryAsync<BookEntity>(
                     @"SELECT * FROM book WHERE id = @Id", new { Id = id }
-                ).FirstOrDefault();
+                );
+
+                return booksData.FirstOrDefault();
             }
         }
 
-        public void Update(BookEntity item)
+        public async Task UpdateAsync(BookEntity item)
         {
             using (IDbConnection dbConnection = DbConnection)
             {
                 dbConnection.Open();
-                dbConnection.Execute(@"
+                await dbConnection.ExecuteAsync(@"
                     UPDATE book
                     SET 
                         title = @Title,
@@ -64,23 +67,23 @@ namespace bag.Modules.Books.Repositories
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             using (IDbConnection dbConnection = DbConnection)
             {
                 dbConnection.Open();
-                dbConnection.Execute(
+                await dbConnection.ExecuteAsync(
                     @"DELETE FROM book WHERE id = @Id", new { Id = id }
                 );
             }
         }
 
-        public IEnumerable<BookEntity> GetAll()
+        public async Task<IEnumerable<BookEntity>> GetAllAsync()
         {
             using (IDbConnection dbConnection = DbConnection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<BookEntity>(
+                return await dbConnection.QueryAsync<BookEntity>(
                     @"SELECT * FROM book"
                 );
             }

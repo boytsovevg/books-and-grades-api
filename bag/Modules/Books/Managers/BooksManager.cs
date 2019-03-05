@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using bag.Modules.Books.Managers.Models;
 using bag.Modules.Books.Repositories.Entities;
 using bag.Modules.Books.Repositories.Interfaces;
@@ -15,31 +16,31 @@ namespace bag.Modules.Books.Managers
             this._booksRepository = booksRepository;
         }
 
-        public void CreateBook(BookModel book)
+        public async Task CreateBookAsync(BookModel book)
         {
-            this._booksRepository.Create(ToEntity(book));
+            await this._booksRepository.CreateAsync(ToEntity(book));
         }
 
-        public BookModel GetBook(int id)
+        public async Task<BookModel> GetBookAsync(int id)
         {
-            return ToModel(this._booksRepository.GetById(id));
+            return ToModel(await this._booksRepository.GetByIdAsync(id));
         }
 
-        public IEnumerable<BookModel> GetBooks()
+        public async Task<IEnumerable<BookModel>> GetBooksAsync()
         {
-            var booksData = this._booksRepository.GetAll().ToList();
+            var booksData = await this._booksRepository.GetAllAsync();
 
             return booksData.Select(ToModel);
         }
 
-        public void UpdateBook(int id, BookModel book)
+        public async Task UpdateBookAsync(int id, BookModel book)
         {
-            this._booksRepository.Update(ToEntity(book));
+            await this._booksRepository.UpdateAsync(ToEntity(book));
         }
 
-        public void DeleteBook(int id)
+        public async Task DeleteBookAsync(int id)
         {
-            this._booksRepository.Delete(id);
+            await this._booksRepository.DeleteAsync(id);
         }
 
         private static BookModel ToModel(BookEntity bookEntity)

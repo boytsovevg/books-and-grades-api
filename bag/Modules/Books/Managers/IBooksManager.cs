@@ -1,18 +1,19 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using bag.Modules.Books.Managers.Models;
 
 namespace bag.Modules.Books.Managers
 {
     public interface IBooksManager
     {
-        void CreateBook(BookModel book);
+        Task CreateBookAsync(BookModel book);
         
-        BookModel GetBook(int id);
+        Task<BookModel> GetBookAsync(int id);
 
-        IEnumerable<BookModel> GetBooks();
+        Task<IEnumerable<BookModel>> GetBooksAsync();
 
-        void UpdateBook(int id, BookModel book);
+        Task UpdateBookAsync(int id, BookModel book);
 
-        void DeleteBook(int id);
+        Task DeleteBookAsync(int id);
     }
 }

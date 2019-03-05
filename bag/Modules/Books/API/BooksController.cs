@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using bag.Modules.Books.API.ViewModels;
 using bag.Modules.Books.Managers;
 using bag.Modules.Books.Managers.Models;
@@ -20,17 +20,17 @@ namespace bag.Modules.Books.API
 
 
         [HttpPost]
-        public IActionResult CreateBook([FromBody]BookViewModel book)
+        public async Task<IActionResult> CreateBook([FromBody]BookViewModel book)
         {
-            this._booksManager.CreateBook(ToModel(book));
+            await this._booksManager.CreateBookAsync(ToModel(book));
             
             return Ok();
         }
         
         [HttpGet("{id}")]
-        public IActionResult GetBook(int id)
+        public async Task<IActionResult> GetBook(int id)
         {
-            var bookData = this._booksManager.GetBook(id);
+            var bookData = await this._booksManager.GetBookAsync(id);
 
             if (bookData != null)
             {
@@ -49,9 +49,9 @@ namespace bag.Modules.Books.API
         }
 
         [HttpGet]
-        public IActionResult GetBooks()
+        public async Task<IActionResult> GetBooks()
         {
-            var booksData = this._booksManager.GetBooks().ToList();
+            var booksData = await this._booksManager.GetBooksAsync();
 
             return Ok(
                 booksData.Select(data => new BookViewModel
@@ -67,15 +67,17 @@ namespace bag.Modules.Books.API
         }
 
         [HttpPut("{id}")]
-        public void UpdateBook(int id, [FromBody]BookViewModel book)
+        public async Task<IActionResult> UpdateBook(int id, [FromBody]BookViewModel book)
         {
-            this._booksManager.UpdateBook(id, ToModel(book));
+            await this._booksManager.UpdateBookAsync(id, ToModel(book));
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteBook(int id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
-            this._booksManager.DeleteBook(id);
+            await this._booksManager.DeleteBookAsync(id);
 
             return Ok();
         }
