@@ -19,11 +19,9 @@ namespace bag.Modules.Books.Repositories
             this._connectionString = configuration.GetConnectionString("PgSql");
         }
 
-        private IDbConnection DbConnection => new NpgsqlConnection(this._connectionString);
-        
         public async Task CreateAsync(BookEntity item)
         {
-            using (IDbConnection dbConnection = DbConnection)
+            using (IDbConnection dbConnection = GetNewDbConnection())
             {
                 dbConnection.Open();
                 await dbConnection.ExecuteAsync(
@@ -38,7 +36,7 @@ namespace bag.Modules.Books.Repositories
 
         public async Task<BookEntity> GetByIdAsync(int id)
         {
-            using (IDbConnection dbConnection = DbConnection)
+            using (IDbConnection dbConnection = GetNewDbConnection())
             {
                 dbConnection.Open();
                 var booksData = await dbConnection.QueryAsync<BookEntity>(
@@ -51,7 +49,7 @@ namespace bag.Modules.Books.Repositories
 
         public async Task UpdateAsync(BookEntity item)
         {
-            using (IDbConnection dbConnection = DbConnection)
+            using (IDbConnection dbConnection = GetNewDbConnection())
             {
                 dbConnection.Open();
                 await dbConnection.ExecuteAsync(@"
@@ -69,7 +67,7 @@ namespace bag.Modules.Books.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            using (IDbConnection dbConnection = DbConnection)
+            using (IDbConnection dbConnection = GetNewDbConnection())
             {
                 dbConnection.Open();
                 await dbConnection.ExecuteAsync(
@@ -80,13 +78,18 @@ namespace bag.Modules.Books.Repositories
 
         public async Task<IEnumerable<BookEntity>> GetAllAsync()
         {
-            using (IDbConnection dbConnection = DbConnection)
+            using (IDbConnection dbConnection = GetNewDbConnection())
             {
                 dbConnection.Open();
                 return await dbConnection.QueryAsync<BookEntity>(
                     @"SELECT * FROM book"
                 );
             }
+        }
+        
+        private IDbConnection GetNewDbConnection()
+        {
+            return new NpgsqlConnection(this._connectionString);
         }
     }
 }
