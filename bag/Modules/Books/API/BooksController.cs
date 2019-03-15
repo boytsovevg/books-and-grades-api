@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using bag.Modules.Books.API.DTOs;
 using bag.Modules.Books.Managers;
-using bag.Modules.Books.Managers.Models;
+using bag.Modules.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bag.Modules.Books.API
@@ -22,7 +22,7 @@ namespace bag.Modules.Books.API
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody]BookDto book)
         {
-            await this._booksManager.CreateBookAsync(ToModel(book));
+            await this._booksManager.CreateBookAsync(book.ToModel());
             
             return Ok();
         }
@@ -34,15 +34,7 @@ namespace bag.Modules.Books.API
 
             if (bookData != null)
             {
-                return Ok(new BookDto
-                {
-                    Id = bookData.Id,
-                    Title = bookData.Title,
-                    Author = bookData.Author,
-                    Grade = bookData.Grade,
-                    PagesNumber = bookData.PagesNumber,
-                    Url = bookData.CoverUrl
-                });
+                return Ok(bookData.ToDto());
             }
             
             return NotFound();
@@ -54,22 +46,14 @@ namespace bag.Modules.Books.API
             var booksData = await this._booksManager.GetBooksAsync();
 
             return Ok(
-                booksData.Select(data => new BookDto
-                {
-                    Id = data.Id,
-                    Title = data.Title,
-                    Author = data.Author,
-                    Grade = data.Grade,
-                    PagesNumber = data.PagesNumber,
-                    Url = data.CoverUrl
-                })
+                booksData.Select(data => data.ToDto())
             );
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, [FromBody]BookDto book)
         {
-            await this._booksManager.UpdateBookAsync(id, ToModel(book));
+            await this._booksManager.UpdateBookAsync(id, book.ToModel());
 
             return Ok();
         }
@@ -80,19 +64,6 @@ namespace bag.Modules.Books.API
             await this._booksManager.DeleteBookAsync(id);
 
             return Ok();
-        }
-
-        private static BookModel ToModel(BookDto bookDto)
-        {
-            return new BookModel
-            {
-                Id = bookDto.Id,
-                Author = bookDto.Author,
-                Title = bookDto.Title,
-                CoverUrl = bookDto.Url,
-                Grade = bookDto.Grade,
-                PagesNumber = bookDto.PagesNumber
-            };
         }
     }
 }

@@ -4,7 +4,7 @@ using bag.Modules.Books.Repositories.Entities;
 
 namespace bag.Modules.Books.Repositories.Interfaces
 {
-    public interface IRepository<T> where T: BaseEntity
+    public interface IRepository<T> where T: IEntity
     {
         Task CreateAsync(T item);
         

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace bag.Modules.Books.Repositories.Entities
 {
-    public class BookEntity: BaseEntity
+    public class BookEntity: IEntity
     {
         [Key]
         public int? Id { get; set; }
