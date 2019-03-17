@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using bag.Modules.Books.API.DTOs;
@@ -63,6 +65,14 @@ namespace bag.Modules.Books.API
         {
             await this._booksManager.DeleteBookAsync(id);
 
+            return Ok();
+        }
+
+        [HttpPatch("{bookId}/progress/update")]
+        public async Task<IActionResult> UpdateProgress(int bookId, [FromBody]int pagesCount)
+        {
+            await this._booksManager.UpdateBookProgressAsync(bookId, pagesCount);
+            
             return Ok();
         }
     }

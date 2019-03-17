@@ -15,7 +15,7 @@ namespace bag.Modules.Extensions
                 Title = bookDto.Title,
                 CoverUrl = bookDto.Url,
                 Grade = bookDto.Grade,
-                PagesNumber = bookDto.PagesNumber
+                PagesNumber = bookDto.PagesCount
             };
         }
         
@@ -53,7 +53,7 @@ namespace bag.Modules.Extensions
                 Title = bookModel.Title,
                 Author = bookModel.Author,
                 Grade = bookModel.Grade,
-                PagesNumber = bookModel.PagesNumber,
+                PagesCount = bookModel.PagesNumber,
                 Url = bookModel.CoverUrl
             };
         }

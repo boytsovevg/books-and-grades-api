@@ -11,7 +11,7 @@ namespace bag.Modules.Extensions
         public static void AddBookDependencies(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IBooksManager, BooksManager>();
-            serviceCollection.AddSingleton<IRepository<BookEntity>, BooksRepository>();
+            serviceCollection.AddSingleton<IBooksRepository, BooksRepository>();
         } 
     }
 }

@@ -15,5 +15,7 @@ namespace bag.Modules.Books.Managers
         Task UpdateBookAsync(int id, BookModel book);
 
         Task DeleteBookAsync(int id);
+
+        Task UpdateBookProgressAsync(int bookId, int pagesCount);
     }
 }

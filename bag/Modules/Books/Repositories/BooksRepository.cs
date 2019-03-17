@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,7 +11,7 @@ using Npgsql;
 
 namespace bag.Modules.Books.Repositories
 {
-    public class BooksRepository: IRepository<BookEntity>
+    public class BooksRepository : IBooksRepository
     {
         private readonly string _connectionString;
 
@@ -40,7 +41,7 @@ namespace bag.Modules.Books.Repositories
             {
                 dbConnection.Open();
                 var booksData = await dbConnection.QueryAsync<BookEntity>(
-                    @"SELECT * FROM book WHERE id = @Id", new { Id = id }
+                    @"SELECT * FROM book WHERE id = @Id", new {Id = id}
                 );
 
                 return booksData.FirstOrDefault();
@@ -71,7 +72,7 @@ namespace bag.Modules.Books.Repositories
             {
                 dbConnection.Open();
                 await dbConnection.ExecuteAsync(
-                    @"DELETE FROM book WHERE id = @Id", new { Id = id }
+                    @"DELETE FROM book WHERE id = @Id", new {Id = id}
                 );
             }
         }
@@ -81,12 +82,78 @@ namespace bag.Modules.Books.Repositories
             using (IDbConnection dbConnection = GetNewDbConnection())
             {
                 dbConnection.Open();
-                return await dbConnection.QueryAsync<BookEntity>(
-                    @"SELECT * FROM book"
-                );
+                return await dbConnection.QueryAsync<BookEntity>(@"
+                    SELECT * FROM book LIMIT 100
+                ");
             }
         }
-        
+
+        public async Task<BookProgressEntity> GetBookProgressAsync(int bookId)
+        {
+            using (IDbConnection dbConnection = GetNewDbConnection())
+            {
+                dbConnection.Open();
+                var bookProgressesData = await dbConnection.QueryAsync(@"
+                        SELECT 
+                               *
+                        FROM 
+                             book_progress
+                        WHERE 
+                              book_id = @BookId
+                    ", new {BookId = bookId}
+                );
+
+                return bookProgressesData.FirstOrDefault();
+            }
+        }
+
+        public async Task<IEnumerable<BookProgressEntity>> GetBooksProgressAsync(int[] bookIds)
+        {
+            using (IDbConnection dbConnection = GetNewDbConnection())
+            {
+                dbConnection.Open();
+                return await dbConnection.QueryAsync<BookProgressEntity>(@"
+                    SELECT *
+                    FROM
+                         book_progress
+                    WHERE 
+                         book_id in (@Ids)
+
+                ", new { Ids = bookIds });
+            }
+        }
+
+        public async Task UpdateBookProgressAsync(int bookId, int pagesCount)
+        {
+            var bookProgress = await this.GetBookProgressAsync(bookId);
+
+            using (IDbConnection dbConnection = GetNewDbConnection())
+            {
+                dbConnection.Open();
+                if (bookProgress == null)
+                {
+                    await dbConnection.ExecuteAsync(@"
+                              INSERT INTO book_progress
+                                     (book_id, pages_count)
+                              VALUES 
+                                     (@BookId, @PagesCount)
+                            ",
+                        new {BookId = bookId, PagesCount = pagesCount}
+                    );
+                }
+                else
+                {
+                    await dbConnection.ExecuteAsync(@"
+                               UPDATE book_progress
+                               SET pages_count = @PagesCount
+                               WHERE book_id = @BookId
+                             ",
+                        new {BookId = bookId, PagesCount = pagesCount}
+                    );
+                }
+            }
+        }
+
         private IDbConnection GetNewDbConnection()
         {
             return new NpgsqlConnection(this._connectionString);

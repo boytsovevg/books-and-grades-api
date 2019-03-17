@@ -12,6 +12,6 @@ namespace bag.Modules.Books.API.DTOs
 
         public string Grade { get; set; }
 
-        public int PagesNumber { get; set; }
+        public int PagesCount { get; set; }
     }
 }

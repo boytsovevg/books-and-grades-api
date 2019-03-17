@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using bag.Modules.Books.Managers.Models;
-using bag.Modules.Books.Repositories.Entities;
 using bag.Modules.Books.Repositories.Interfaces;
 using bag.Modules.Extensions;
 
@@ -10,9 +9,9 @@ namespace bag.Modules.Books.Managers
 {
     public class BooksManager: IBooksManager
     {
-        private readonly IRepository<BookEntity> _booksRepository;
+        private readonly IBooksRepository _booksRepository;
 
-        public BooksManager(IRepository<BookEntity> booksRepository)
+        public BooksManager(IBooksRepository booksRepository)
         {
             this._booksRepository = booksRepository;
         }
@@ -44,6 +43,11 @@ namespace bag.Modules.Books.Managers
         public async Task DeleteBookAsync(int id)
         {
             await this._booksRepository.DeleteAsync(id);
+        }
+
+        public async Task UpdateBookProgressAsync(int bookId, int pagesCount)
+        {
+            await this._booksRepository.UpdateBookProgressAsync(bookId, pagesCount);
         }
     }
 }
