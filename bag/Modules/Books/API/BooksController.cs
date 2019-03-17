@@ -68,10 +68,10 @@ namespace bag.Modules.Books.API
             return Ok();
         }
 
-        [HttpPatch("{bookId}/progress/update")]
-        public async Task<IActionResult> UpdateProgress(int bookId, [FromBody]int pagesCount)
+        [HttpPatch("{bookId}/progress")]
+        public async Task<IActionResult> UpdateProgress(int bookId, [FromBody]BookProgressDto bookProgress)
         {
-            await this._booksManager.UpdateBookProgressAsync(bookId, pagesCount);
+            await this._booksManager.UpdateBookProgressAsync(bookId, bookProgress.PagesCount);
             
             return Ok();
         }
