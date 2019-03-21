@@ -6,15 +6,17 @@ namespace bag.Modules.Books.Managers
 {
     public interface IBooksManager
     {
-        Task CreateBookAsync(BookModel book);
+        Task CreateBookAsync(Book book);
         
-        Task<BookModel> GetBookAsync(int id);
+        Task<Book> GetBookAsync(int id);
 
-        Task<IEnumerable<BookModel>> GetBooksAsync();
+        Task<IEnumerable<Book>> GetBooksAsync();
 
-        Task UpdateBookAsync(int id, BookModel book);
+        Task UpdateBookAsync(int id, Book book);
 
         Task DeleteBookAsync(int id);
+
+        Task<IEnumerable<BookProgress>> GetBooksProgress(int[] ids);
 
         Task UpdateBookProgressAsync(int bookId, int pagesCount);
     }

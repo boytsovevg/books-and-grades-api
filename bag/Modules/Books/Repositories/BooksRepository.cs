@@ -17,7 +17,7 @@ namespace bag.Modules.Books.Repositories
 
         public BooksRepository(IConfiguration configuration)
         {
-            this._connectionString = configuration.GetConnectionString("PgSql");
+            _connectionString = configuration.GetConnectionString("PgSql");
         }
 
         public async Task CreateAsync(BookEntity item)
@@ -112,20 +112,27 @@ namespace bag.Modules.Books.Repositories
             using (IDbConnection dbConnection = GetNewDbConnection())
             {
                 dbConnection.Open();
-                return await dbConnection.QueryAsync<BookProgressEntity>(@"
-                    SELECT *
-                    FROM
-                         book_progress
-                    WHERE 
-                         book_id in (@Ids)
-
-                ", new { Ids = bookIds });
+                try
+                {
+                    return await dbConnection.QueryAsync<BookProgressEntity>(@"
+                        SELECT * 
+                        FROM
+                             book_progress
+                        WHERE 
+                             book_id IN @Ids
+                    ", new { Ids = bookIds });
+                }
+                catch (Exception e)
+                {
+                    return Array.Empty<BookProgressEntity>();
+                }
+                
             }
         }
 
         public async Task UpdateBookProgressAsync(int bookId, int pagesCount)
         {
-            var bookProgress = await this.GetBookProgressAsync(bookId);
+            var bookProgress = await GetBookProgressAsync(bookId);
 
             using (IDbConnection dbConnection = GetNewDbConnection())
             {
@@ -156,7 +163,7 @@ namespace bag.Modules.Books.Repositories
 
         private IDbConnection GetNewDbConnection()
         {
-            return new NpgsqlConnection(this._connectionString);
+            return new NpgsqlConnection(_connectionString);
         }
     }
 }

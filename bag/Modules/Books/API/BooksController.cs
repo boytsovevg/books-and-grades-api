@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace bag.Modules.Books.API
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BooksController : Controller
     {
@@ -17,14 +17,14 @@ namespace bag.Modules.Books.API
         
         public BooksController(IBooksManager booksManager)
         {
-            this._booksManager = booksManager;
+            _booksManager = booksManager;
         }
 
 
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody]BookDto book)
         {
-            await this._booksManager.CreateBookAsync(book.ToModel());
+            await _booksManager.CreateBookAsync(book.ToModel());
             
             return Ok();
         }
@@ -32,7 +32,7 @@ namespace bag.Modules.Books.API
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook(int id)
         {
-            var bookData = await this._booksManager.GetBookAsync(id);
+            var bookData = await _booksManager.GetBookAsync(id);
 
             if (bookData != null)
             {
@@ -45,7 +45,7 @@ namespace bag.Modules.Books.API
         [HttpGet]
         public async Task<IActionResult> GetBooks()
         {
-            var booksData = await this._booksManager.GetBooksAsync();
+            var booksData = await _booksManager.GetBooksAsync();
 
             return Ok(
                 booksData.Select(data => data.ToDto())
@@ -55,7 +55,7 @@ namespace bag.Modules.Books.API
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, [FromBody]BookDto book)
         {
-            await this._booksManager.UpdateBookAsync(id, book.ToModel());
+            await _booksManager.UpdateBookAsync(id, book.ToModel());
 
             return Ok();
         }
@@ -63,15 +63,24 @@ namespace bag.Modules.Books.API
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
-            await this._booksManager.DeleteBookAsync(id);
+            await _booksManager.DeleteBookAsync(id);
 
             return Ok();
         }
 
+        [HttpGet]
+        [Route("progress")]
+        public async Task<IActionResult> GetBooksProgress([FromQuery(Name = "ids")]int[] ids)
+        {
+            var booksProgress = await _booksManager.GetBooksProgress(ids);
+
+            return Ok(booksProgress.Select(progress => progress.ToDto()));
+        }
+        
         [HttpPatch("{bookId}/progress")]
         public async Task<IActionResult> UpdateProgress(int bookId, [FromBody]BookProgressDto bookProgress)
         {
-            await this._booksManager.UpdateBookProgressAsync(bookId, bookProgress.PagesCount);
+            await _booksManager.UpdateBookProgressAsync(bookId, bookProgress.PagesCount);
             
             return Ok();
         }

@@ -4,11 +4,11 @@ using bag.Modules.Books.Repositories.Entities;
 
 namespace bag.Modules.Extensions
 {
-    public static class BookConverter
+    public static class BookExtension
     {
-        public static BookModel ToModel(this BookDto bookDto)
+        public static Book ToModel(this BookDto bookDto)
         {
-            return new BookModel
+            return new Book
             {
                 Id = bookDto.Id,
                 Author = bookDto.Author,
@@ -19,9 +19,9 @@ namespace bag.Modules.Extensions
             };
         }
         
-        public static BookModel ToModel(this BookEntity bookEntity)
+        public static Book ToModel(this BookEntity bookEntity)
         {
-            return new BookModel
+            return new Book
             {
                 Id = bookEntity.Id,
                 Author = bookEntity.Author,
@@ -32,7 +32,7 @@ namespace bag.Modules.Extensions
             };
         }
 
-        public static BookEntity ToEntity(this BookModel bookModel)
+        public static BookEntity ToEntity(this Book bookModel)
         {
             return new BookEntity
             {
@@ -45,7 +45,7 @@ namespace bag.Modules.Extensions
             };
         }
 
-        public static BookDto ToDto(this BookModel bookModel)
+        public static BookDto ToDto(this Book bookModel)
         {
             return new BookDto
             {

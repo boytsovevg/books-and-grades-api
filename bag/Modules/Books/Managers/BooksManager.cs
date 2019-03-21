@@ -13,41 +13,48 @@ namespace bag.Modules.Books.Managers
 
         public BooksManager(IBooksRepository booksRepository)
         {
-            this._booksRepository = booksRepository;
+            _booksRepository = booksRepository;
         }
 
-        public async Task CreateBookAsync(BookModel book)
+        public async Task CreateBookAsync(Book book)
         {
-            await this._booksRepository.CreateAsync(book.ToEntity());
+            await _booksRepository.CreateAsync(book.ToEntity());
         }
 
-        public async Task<BookModel> GetBookAsync(int id)
+        public async Task<Book> GetBookAsync(int id)
         {
-            var bookEntity = await this._booksRepository.GetByIdAsync(id);
+            var bookEntity = await _booksRepository.GetByIdAsync(id);
 
             return bookEntity.ToModel();
         }
 
-        public async Task<IEnumerable<BookModel>> GetBooksAsync()
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            var booksData = await this._booksRepository.GetAllAsync();
+            var booksData = await _booksRepository.GetAllAsync();
 
             return booksData.Select(data => data.ToModel());
         }
 
-        public async Task UpdateBookAsync(int id, BookModel book)
+        public async Task UpdateBookAsync(int id, Book book)
         {
-            await this._booksRepository.UpdateAsync(book.ToEntity());
+            await _booksRepository.UpdateAsync(book.ToEntity());
         }
 
         public async Task DeleteBookAsync(int id)
         {
-            await this._booksRepository.DeleteAsync(id);
+            await _booksRepository.DeleteAsync(id);
+        }
+
+        public async Task<IEnumerable<BookProgress>> GetBooksProgress(int[] ids)
+        {
+            var booksProgressData = await _booksRepository.GetBooksProgressAsync(ids);
+
+            return booksProgressData.Select(data => data.ToModel());
         }
 
         public async Task UpdateBookProgressAsync(int bookId, int pagesCount)
         {
-            await this._booksRepository.UpdateBookProgressAsync(bookId, pagesCount);
+            await _booksRepository.UpdateBookProgressAsync(bookId, pagesCount);
         }
     }
 }
